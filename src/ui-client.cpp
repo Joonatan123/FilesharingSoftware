@@ -504,9 +504,9 @@ ClientUi::ClientUi()
     wxPanel *middleLeftButtons = new wxPanel(middleLeftPanel);
     /// middleLeftButtons->SetBackgroundColour(wxColor(230, 230, 230));
     // wxPanel *tree = new wxPanel(middleLeftPanel);
-    tree = new wxTreeCtrl(middleLeftPanel, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxTR_NO_LINES, wxDefaultValidator, "lol"); // wxTR_ROW_LINES
+    tree = new wxTreeCtrl(middleLeftPanel, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxVSCROLL, wxDefaultValidator, "lol"); // wxTR_ROW_LINES
     tree->Bind(wxEVT_TREE_ITEM_ACTIVATED, &ClientUi::TreeClick, this);
-    tree->ShowScrollbars(wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT);
+    //tree->ShowScrollbars(wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT); #does not exist on windows
     tree->SetImageList(imageList);
     // std::vector<std::string> folders({"/home/user/Projects/filesharingsoftware/UITesting/", "/home/user/Projects/filesharingsoftware/UITesting/"});
     // idClientMap[0].MakeFolders(folders);
