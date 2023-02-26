@@ -181,11 +181,11 @@ std::stringstream &Log::LogStream::operator<<(Important t)
     print = t;
     return stream;
 }
-Log::LogStream::LogStream(logging::trivial::severity_level severity, Source source)
+/*Log::LogStream::LogStream(logging::trivial::severity_level severity, Source source)
 {
     this->severity = severity;
     this->source = source;
-}
+}*/
 /*Log::LogStream::LogStream(logging::trivial::severity_level severity)
 {
     this->severity = severity;

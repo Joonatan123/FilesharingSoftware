@@ -1,9 +1,6 @@
-#define BOOST_LOG_DYN_LINK 1
 #include <ostream>
 #include <fstream>
 #include <sstream>
-
-#include <boost/shared_ptr.hpp>
 
 #include <boost/function.hpp>
 #include <boost/core/null_deleter.hpp>
@@ -102,7 +99,11 @@ namespace Log
             return stream;
         }
         std::stringstream &operator<<(Important t);
-        LogStream(logging::trivial::severity_level severity, Source source);
+        LogStream(logging::trivial::severity_level severity, Source source)
+        {
+            this->severity = severity;
+            this->source = source;
+        }
         // LogStream(logging::trivial::severity_level severity);
 
         ~LogStream();
