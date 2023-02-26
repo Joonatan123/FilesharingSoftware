@@ -1,0 +1,32 @@
+LFLAGS = -I./include/  -std=c++17
+FLAGS = -lole32 -luxtheme -lshlwapi -lversion -mthreads -mwindows -lrpcrt4 -loleaut32 -lole32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32 -luuid -loleacc -lws2_32
+WX_FLAGS = -lwxmsw32ud_core -lwxbase32ud -lwxpngd -lwxjpegd -lwxtiffd -lwxzlibd
+BOOST_FLAGS = -lboost_system-mgw8-mt-d-x64-1_81 -lboost_filesystem-mgw8-mt-d-x64-1_81 -lboost_thread-mgw8-mt-d-x64-1_81 -lboost_chrono-mgw8-mt-d-x64-1_81 -lboost_log-mgw8-mt-d-x64-1_81 -lboost_serialization-mgw8-mt-d-x64-1_81
+INCLUDE_FLAGS = -I ./include -I "C:\Program Files\Boost\boost_1_81_0" -L "C:\boost\lib"  -L "C:\wxWidgets-3.2.2.1\lib\gcc_lib"  -I "C:\wxWidgets-3.2.2.1\lib\gcc_lib\mswud" -I "C:\wxWidgets-3.2.2.1\include"
+IMPLEMENT_FILES = -I ".\src\filesystem" -I ".\src\Log" -I ".\src\misc" -I ".\src\network" -I ".\src\P2P" -I ".\src\Ui"  
+
+SRC_DIR := .\src
+OBJ_DIR := .\build\obj
+EXE_DIR := .\build\executables
+
+SOURCES   := $(wildcard $(SRC_DIR)/*/*.cpp)
+OBJECTS   := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(SOURCES))
+
+uiclient: $(OBJECTS)
+	if not exist "$(dir $(subst /,\,$(EXE_DIR)))" mkdir "$(dir $(subst /,\,$(EXE_DIR)))"
+	g++ $(SRC_DIR)/ui-client.cpp -o ./build/executables/uiclient $(LFLAGS) $(OBJECTS) $(INCLUDE_FLAGS) $(WX_FLAGS) $(BOOST_FLAGS) $(FLAGS)
+
+server: $(OBJECTS)
+	@mkdir $(EXE_DIR)
+	g++ $(LFLAGS) $(SRC_DIR)/fss-server.cpp -o ./build/executables/server $(OBJECTS) $(FLAGS)
+
+clear:
+	del $(subst /,\,$(OBJECTS))
+
+info:
+	@echo $(SOURCES)
+	@echo $(OBJECTS)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	if not exist "$(dir $(subst /,\,$@))" mkdir "$(dir $(subst /,\,$@))"
+	g++ $(LFLAGS) -c -o $@ $^  $(INCLUDE_FLAGS) $(WX_FLAGS) $(BOOST_FLAGS) $(FLAGS)
