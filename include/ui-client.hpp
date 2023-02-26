@@ -34,7 +34,7 @@ class ClientUi : public wxFrame
     wxListCtrl *list;
     wxImageList *imageList;
     std::map<wxTreeItemId, FilesystemEntry> treeEntryMap;
-    std::mutex drawMutex;
+    boost::mutex drawMutex;
     wxStatusBar *bottomBar;
     std::map<wxTreeItemId, int> treeSystemMap;
     std::map<wxTreeItemId, int> treeFolderMap;

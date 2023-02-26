@@ -4,7 +4,6 @@
 #include <tuple>
 #include <sstream>
 #include <map>
-#include <mutex>
 #include <queue>
 
 #include <boost/asio.hpp>
@@ -48,7 +47,7 @@ namespace P2P
         boost::thread m_uploadthread;
         bool m_running = false;
 
-        std::mutex mapmutex;
+        boost::mutex mapmutex;
         std::map<int, DownloadDataPacket> m_id_packetmap;
         std::map<int, clock::time_point> m_id_timeoutmap;
         int undelivered_packets;

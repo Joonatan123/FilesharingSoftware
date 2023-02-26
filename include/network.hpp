@@ -9,7 +9,6 @@
 #include <iostream>
 #include <assert.h>
 #include <streambuf>
-#include <mutex>
 
 using namespace boost::asio;
 using ip::tcp;

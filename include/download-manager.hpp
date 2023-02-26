@@ -4,7 +4,6 @@
 #include <tuple>
 #include <sstream>
 #include <map>
-#include <mutex>
 #include <queue>
 
 #include <boost/asio.hpp>
