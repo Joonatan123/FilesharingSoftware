@@ -12,6 +12,7 @@
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 #include "ConvertPacket.hpp"
 #include "P2P-packet.hpp"

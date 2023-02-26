@@ -1,8 +1,10 @@
 #include <iostream>
 
+#include "log.hpp"
 #include "network-client.hpp"
 #include "fss-class.hpp"
 #include "P2P-client.hpp"
+#pragma once
 
 class FssClient
 {

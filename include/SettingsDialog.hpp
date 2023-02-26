@@ -8,6 +8,8 @@
 #include <wx/image.h>
 #include <iostream>
 
+#pragma once
+
 class SettingsDialog : public wxDialog
 {
 public:

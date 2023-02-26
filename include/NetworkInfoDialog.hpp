@@ -8,6 +8,8 @@
 #include <wx/image.h>
 #include <iostream>
 
+#pragma once
+
 class NetworkInfoDialog : public wxDialog
 {
 public:

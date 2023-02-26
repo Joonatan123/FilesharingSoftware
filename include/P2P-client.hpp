@@ -12,6 +12,8 @@
 #include "download-manager.hpp"
 #include "file-list.hpp"
 
+#pragma once
+
 namespace P2P
 {
     class P2PClient

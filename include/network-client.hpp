@@ -13,6 +13,8 @@
 #include "file-list.hpp"
 #include "log.hpp"
 
+#pragma once
+
 class FssClient;
 
 class NetworkClient
