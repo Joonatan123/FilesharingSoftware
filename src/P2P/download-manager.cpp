@@ -122,7 +122,7 @@ void P2P::DownloadManager::DownloadFile()
     p /= fs::path(filename);
     LOG_INFO(p2p) << "downloading to: " << p.string();
     LOG_INFO(p2p) << Log::Important() << "downloading file: " << p.filename().string();
-    fs::ofstream ostream(p);
+    fs::ofstream ostream(p, std::ios::binary);
     int lastWrittenPacketId = 0;
 
     int fileLeft = fileSize;

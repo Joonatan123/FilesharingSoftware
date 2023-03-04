@@ -65,7 +65,7 @@ void P2P::UploadManager::UploadFile()
         throw std::exception();
     }
     fs::path p(path);
-    fs::ifstream istream(p);
+    fs::ifstream istream(p, std::ios::binary);
     int packetOrderNumber = 0;
     undelivered_packets = 0;
     while (bytesLeft > 0 || undelivered_packets > 0)
