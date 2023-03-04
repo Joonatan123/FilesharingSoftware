@@ -301,7 +301,7 @@ void ClientUi::MakeTree()
 {
     drawMutex.lock();
     tree->DeleteAllItems();
-    wxTreeItemId root = tree->AppendItem(tree->GetRootItem(), "root", -1, -1, NULL);
+    wxTreeItemId root = tree->AddRoot("Test1");//->AppendItem(tree->GetRootItem(), "root", -1, -1, NULL);
     for (auto it = idClientMap.begin(); it != idClientMap.end(); it++)
     {
         MakeTreeSingle(it->first, root);
@@ -504,7 +504,7 @@ ClientUi::ClientUi()
     wxPanel *middleLeftButtons = new wxPanel(middleLeftPanel);
     /// middleLeftButtons->SetBackgroundColour(wxColor(230, 230, 230));
     // wxPanel *tree = new wxPanel(middleLeftPanel);
-    tree = new wxTreeCtrl(middleLeftPanel, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxVSCROLL, wxDefaultValidator, "lol"); // wxTR_ROW_LINES
+    tree = new wxTreeCtrl(middleLeftPanel, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxTR_HIDE_ROOT | wxTR_DEFAULT_STYLE, wxDefaultValidator, "lol"); // wxTR_ROW_LINES //wxTR_HIDE_ROOT |
     tree->Bind(wxEVT_TREE_ITEM_ACTIVATED, &ClientUi::TreeClick, this);
     //tree->ShowScrollbars(wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT); #does not exist on windows
     tree->SetImageList(imageList);
