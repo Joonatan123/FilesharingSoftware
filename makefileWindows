@@ -9,24 +9,33 @@ SRC_DIR := .\src
 OBJ_DIR := .\build\obj
 EXE_DIR := .\build\executables
 
-SOURCES   := $(wildcard $(SRC_DIR)/*/*.cpp)
-OBJECTS   := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(SOURCES))
+WX_SOURCES   := $(wildcard $(SRC_DIR)/Ui/*.cpp)
+WX_OBJECTS   := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(WX_SOURCES))
+SOURCES := $(wildcard $(SRC_DIR)/filesystem/*.cpp) $(wildcard $(SRC_DIR)/Log/*.cpp) $(wildcard $(SRC_DIR)/misc/*.cpp) $(wildcard $(SRC_DIR)/network/*.cpp) $(wildcard $(SRC_DIR)/P2P/*.cpp)
+OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(SOURCES))
 
-uiclient: $(OBJECTS)
+uiclient: $(WX_OBJECTS) $(OBJECTS)
 	if not exist "$(dir $(subst /,\,$(EXE_DIR)))" mkdir "$(dir $(subst /,\,$(EXE_DIR)))"
-	g++ $(SRC_DIR)/ui-client.cpp -o ./build/executables/uiclient $(LFLAGS) $(OBJECTS) $(INCLUDE_FLAGS) $(WX_FLAGS) $(BOOST_FLAGS) $(FLAGS)
+	g++ $(SRC_DIR)/ui-client.cpp -o ./build/executables/uiclient $(LFLAGS) $(OBJECTS) $(WX_OBJECTS) $(INCLUDE_FLAGS) $(WX_FLAGS) $(BOOST_FLAGS) $(FLAGS) --machine-console
 
 server: $(OBJECTS)
-	@mkdir $(EXE_DIR)
-	g++ $(LFLAGS) $(SRC_DIR)/fss-server.cpp -o ./build/executables/server $(OBJECTS) $(FLAGS)
+	if not exist "$(dir $(subst /,\,$(EXE_DIR)))" mkdir "$(dir $(subst /,\,$(EXE_DIR)))"
+	g++ $(SRC_DIR)/fss-server.cpp -o ./build/executables/server $(LFLAGS) $(OBJECTS) $(INCLUDE_FLAGS) $(BOOST_FLAGS) $(FLAGS) --machine-console
 
 clear:
 	del $(subst /,\,$(OBJECTS))
+	del $(subst /,\,$(WX_OBJECTS))
 
 info:
+	@echo Sources:
 	@echo $(SOURCES)
+	@echo Objects:
 	@echo $(OBJECTS)
+	@echo wxObjects:
+	@echo $(WX_OBJECTS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)%.o: $(SRC_DIR)/%.cpp
 	if not exist "$(dir $(subst /,\,$@))" mkdir "$(dir $(subst /,\,$@))"
-	g++ $(LFLAGS) -c -o $@ $^  $(INCLUDE_FLAGS) $(WX_FLAGS) $(BOOST_FLAGS) $(FLAGS)
+
+	if "$(dir $(subst /,\,$@))"==".\build\obj\Ui\" g++ $(LFLAGS) -c -o $@ $^  $(INCLUDE_FLAGS) $(WX_FLAGS) $(BOOST_FLAGS) $(FLAGS)
+	if not "$(dir $(subst /,\,$@))"==".\build\obj\Ui\" g++ $(LFLAGS) -c -o $@ $^  $(INCLUDE_FLAGS) $(BOOST_FLAGS) $(FLAGS)
