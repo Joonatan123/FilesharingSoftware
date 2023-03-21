@@ -1,25 +1,14 @@
 #include <ostream>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include <boost/function.hpp>
 #include <boost/core/null_deleter.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/optional.hpp>
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sinks/sync_frontend.hpp>
-#include <boost/log/sinks/text_ostream_backend.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
-#include <boost/log/utility/formatting_ostream.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/value_extraction.hpp>
 
-#include <boost/log/utility/manipulators/add_value.hpp>
-#include <boost/log/attributes/scoped_attribute.hpp>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <boost/phoenix/bind.hpp>
 
@@ -40,39 +29,30 @@ namespace Log
         p2p,
     };
 
-    // Define the attribute keywords
-    namespace logging = boost::log;
-    namespace src = boost::log::sources;
-    namespace expr = boost::log::expressions;
-    namespace sinks = boost::log::sinks;
+    std::string SourceToString(Source source);
 
-    extern src::severity_logger<logging::trivial::severity_level> lg;
+    enum SeverityLevel
+    {
+        trace,
+        debug,
+        info,
+        warning,
+        error,
+        fatal,
+    };
 
-    // The operator is used for regular stream formatting
-    std::ostream &operator<<(std::ostream &strm, Source level);
-    BOOST_LOG_ATTRIBUTE_KEYWORD(source, "Source", Source)
-    BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", logging::trivial::severity_level)
+    std::string SeverityToString(SeverityLevel severity);
 
-    // The operator is used when putting the severity level to log
-    logging::formatting_ostream &operator<<(
-        logging::formatting_ostream &strm,
-        logging::to_log_manip<Source, tag::source> const &manip);
 }
+
 namespace Log
 {
-    bool filter_function(logging::value_ref<logging::trivial::severity_level, tag::severity> const &level,
-                         logging::value_ref<Source, tag::source> const &sourceValue);
-}
-namespace Log
-{
+    extern bool useColorPrinting;
     extern bool importantMessageDisplayCallbackSet;
     extern boost::function<void(std::string)> importantMessageDisplayCallback;
     void SetMessageCallback(boost::function<void(std::string)> i);
     std::wstring FormatTime(boost::posix_time::ptime now);
-    void packet_formatter(logging::record_view const &rec, logging::formatting_ostream &strm);
-    void formatter(logging::record_view const &rec, logging::formatting_ostream &strm);
-    void coloring_formatter(
-        logging::record_view const &rec, logging::formatting_ostream &strm);
+    void SetColor(Log::SeverityLevel severity);
     void init();
     class Important
     {
@@ -86,7 +66,7 @@ namespace Log
     {
     public:
         std::stringstream stream;
-        logging::trivial::severity_level severity;
+        SeverityLevel severity;
         Source source;
         bool importantMessage = false;
         Important print;
@@ -99,7 +79,7 @@ namespace Log
             return stream;
         }
         std::stringstream &operator<<(Important t);
-        LogStream(logging::trivial::severity_level severity, Source source)
+        LogStream(SeverityLevel severity, Source source)
         {
             this->severity = severity;
             this->source = source;
@@ -117,7 +97,7 @@ namespace Log
 }
 // #define LOG_SEV(severity) (Log::LogStream(Log::logging::trivial::severity_level::severity))
 
-#define LOG_MANUAL(severity, source) (Log::LogStream(Log::logging::trivial::severity_level::severity, Log::Source::source))
+#define LOG_MANUAL(severity, source) (Log::LogStream(Log::SeverityLevel::severity, Log::Source::source))
 
 /*#define LOG_TRACE LOG_SEV(trace)
 #define LOG_DEBUG LOG_SEV(debug)

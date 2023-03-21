@@ -1,5 +1,5 @@
-LFLAGS = -I./include/ -DBOOST_LOG_DYN_LINK
-FLAGS = `wx-config --cxxflags --libs std` -lboost_system -lboost_filesystem -lboost_thread -lboost_chrono -lboost_log -lboost_serialization -lpthread
+LFLAGS = -I./include/
+FLAGS = `wx-config --cxxflags --libs std` -lboost_system -lboost_filesystem -lboost_thread -lboost_chrono -lboost_serialization -lpthread -static
 WX_FLAGS = `wx-config --cxxflags --libs std`
 
 SRC_DIR := ./src
