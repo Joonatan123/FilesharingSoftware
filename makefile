@@ -1,5 +1,5 @@
 LFLAGS = -I./include/
-FLAGS = `wx-config --cxxflags --libs std` -l:libboost_system.a -l:libboost_filesystem.a -l:libboost_thread.a -l:libboost_chrono.a -l:libboost_serialization.a -lpthread
+FLAGS = -l:libboost_system.a -l:libboost_filesystem.a -l:libboost_thread.a -l:libboost_chrono.a -l:libboost_serialization.a -lpthread
 WX_FLAGS = `wx-config --cxxflags --libs std`
 
 SRC_DIR := ./src
@@ -11,7 +11,7 @@ OBJECTS   := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(SOURCES))
 
 uiclient: $(OBJECTS)
 	@mkdir -p $(EXE_DIR)
-	g++ $(LFLAGS) $(SRC_DIR)/ui-client.cpp -o ./build/executables/uiclient $(OBJECTS) $(FLAGS)
+	g++ $(LFLAGS) $(SRC_DIR)/ui-client.cpp -o ./build/executables/uiclient $(OBJECTS) $(WX_FLAGS) $(FLAGS)
 
 server: $(OBJECTS)
 	@mkdir -p $(EXE_DIR)
@@ -26,4 +26,6 @@ info:
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
-	g++ $(LFLAGS) -c -o $@ $^ $(FLAGS)
+	@echo building "$@"
+	@if [ "$(dir $@)" = "build/obj/Ui/" ]; then g++ $(LFLAGS) -c -o $@ $^ $(WX_FLAGS) $(FLAGS); fi;
+	@if [ "$(dir $@)" != "build/obj/Ui/" ]; then g++ $(LFLAGS) -c -o $@ $^ $(FLAGS); fi;
