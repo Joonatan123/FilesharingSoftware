@@ -6,16 +6,19 @@ SRC_DIR := ./src
 OBJ_DIR := ./build/obj
 EXE_DIR := ./build/executables
 
-SOURCES   := $(wildcard $(SRC_DIR)/*/*.cpp)
-OBJECTS   := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(SOURCES))
+SOURCES := $(wildcard $(SRC_DIR)/filesystem/*.cpp) $(wildcard $(SRC_DIR)/Log/*.cpp) $(wildcard $(SRC_DIR)/misc/*.cpp) $(wildcard $(SRC_DIR)/network/*.cpp) $(wildcard $(SRC_DIR)/P2P/*.cpp)
+OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(SOURCES))
 
-uiclient: $(OBJECTS)
+WX_SOURCES   := $(wildcard $(SRC_DIR)/Ui/*.cpp)
+WX_OBJECTS   := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o,$(WX_SOURCES))
+
+uiclient: $(OBJECTS) $(WX_OBJECTS)
 	@mkdir -p $(EXE_DIR)
-	g++ $(LFLAGS) $(SRC_DIR)/ui-client.cpp -o ./build/executables/uiclient $(OBJECTS) $(WX_FLAGS) $(FLAGS)
+	g++ $(LFLAGS) $(SRC_DIR)/ui-client.cpp -o ./build/executables/uiclient $(OBJECTS) $(WX_OBJECTS) $(WX_FLAGS) $(FLAGS)
 
 server: $(OBJECTS)
 	@mkdir -p $(EXE_DIR)
-	g++ $(LFLAGS) $(SRC_DIR)/fss-server.cpp -o ./build/executables/server $(OBJECTS) $(FLAGS)
+	g++ $(LFLAGS) $(SRC_DIR)/fss-server.cpp -o ./build/executables/server $(OBJECTS) $(WX_FLAGS) $(FLAGS)
 
 clear:
 	rm $(OBJECTS)
@@ -23,6 +26,8 @@ clear:
 info:
 	@echo $(SOURCES)
 	@echo $(OBJECTS)
+	@echo $(WX_SOURCES)
+	@echo $(WX_OBJECTS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
