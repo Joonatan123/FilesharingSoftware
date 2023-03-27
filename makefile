@@ -1,4 +1,4 @@
-LFLAGS = -I./include/
+LFLAGS = -I./include/ -static-libgcc -static-libstdc++
 FLAGS = -l:libboost_system.a -l:libboost_filesystem.a -l:libboost_thread.a -l:libboost_chrono.a -l:libboost_serialization.a -lpthread
 WX_FLAGS = `wx-config --cxxflags --libs std`
 
