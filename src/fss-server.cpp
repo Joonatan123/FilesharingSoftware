@@ -99,7 +99,8 @@ void FssServer::LoadState()
         LOG_INFO(main_app) << "no \"server_state\" file found";
         return;
     }
-    else{
+    else
+    {
         LOG_INFO(main_app) << "server save found. loading";
     }
     std::ifstream ifs("server_state");
@@ -253,14 +254,17 @@ void FssServer::handle_mediator_write(int receiverId, P2P::EndpointInfo endPoint
 {
     m_network.send_packet(m_id_conmap[receiverId], Header(Header::UDP_ADDRESS), endPointInfo);
 }
-void FssServer::start()
+void FssServer::start(bool enable_console)
 {
     LoadState();
     m_network.listen(12345);
     auto temp = boost::bind(&NetworkServer::run, &m_network);
     boost::thread t{temp};
-    auto temp2 = boost::bind(&ReadCommand, &m_cmdbuffer);
-    boost::thread t2{temp2};
+    if (enable_console)
+    {
+        auto temp2 = boost::bind(&ReadCommand, &m_cmdbuffer);
+        boost::thread t2{temp2};
+    }
     auto temp3 = boost::bind(&P2P::P2PMediator::Run, &m_mediator);
     boost::thread t3{temp3};
     while (true)
@@ -307,12 +311,19 @@ void FssServer::start()
     }
 }
 
-int main()
+int main(int argc, char **argv)
 {
+    bool enable_console = true;
+    for (int i = 0; i < argc; i++)
+    {
+        if (strcmp(argv[i], "--no_console") == 0)
+            enable_console = false;
+    }
+
     Log::init();
     std::cout << "working\n";
     FssServer server;
-    server.start();
+    server.start(enable_console);
     for (int i = 0; true; i++)
         i++;
     return 0;

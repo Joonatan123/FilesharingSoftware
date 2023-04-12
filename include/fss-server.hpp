@@ -41,6 +41,6 @@ public:
     P2P::P2PMediator::callback_t make_mediator_callback();
     void handle_packet(Header header, PacketBinary *packet, NetworkServer::con_handle_t con_handle, boost::system::error_code const &err);
     void handle_mediator_write(int receiverId, P2P::EndpointInfo endPointInfo);
-    void start();
+    void start(bool enable_console);
 };
-int main();
+int main(int argc, char **argv);
