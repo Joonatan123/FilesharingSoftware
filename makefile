@@ -18,7 +18,7 @@ uiclient: $(OBJECTS) $(WX_OBJECTS)
 
 server: $(OBJECTS)
 	@mkdir -p $(EXE_DIR)
-	g++ $(LFLAGS) $(SRC_DIR)/fss-server.cpp -o ./build/executables/server $(OBJECTS) $(WX_FLAGS) $(FLAGS)
+	g++ $(LFLAGS) $(SRC_DIR)/fss-server.cpp -o ./build/executables/server $(OBJECTS) $(FLAGS)
 
 clear:
 	rm $(OBJECTS)
