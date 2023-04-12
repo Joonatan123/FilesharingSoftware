@@ -94,6 +94,14 @@ void FssServer::LoadState()
         LOG_INFO(main_app) << "can't load state: client entry already present";
         return;
     }
+    if (!boost::filesystem::exists("server_state"))
+    {
+        LOG_INFO(main_app) << "no \"server_state\" file found";
+        return;
+    }
+    else{
+        LOG_INFO(main_app) << "server save found. loading";
+    }
     std::ifstream ifs("server_state");
 
     {
@@ -133,7 +141,7 @@ void FssServer::handle_packet(Header header, PacketBinary *packet, NetworkServer
         {
             LOG_ERROR(main_app) << "erron on packet handle: " << err.message();
             header.message_type = Header::CLOSE_CONNECTION;
-            //return;
+            // return;
         }
     }
     // m_network.send_packet(con_handle, Header(Header::CLOSE_CONNECTION), 123);
@@ -159,6 +167,8 @@ void FssServer::handle_packet(Header header, PacketBinary *packet, NetworkServer
         send_full_peer_update(con_handle, id);
 
         SendSingleUpdateToAll(id);
+
+        SaveState();
 
         break;
     }
@@ -200,6 +210,8 @@ void FssServer::handle_packet(Header header, PacketBinary *packet, NetworkServer
         *m_con_clientmap[con_handle] = system;
         if (id != -1)
             SendSingleUpdateToAll(id);
+
+        SaveState();
         break;
     }
     case Header::REDIRECT:
@@ -243,6 +255,7 @@ void FssServer::handle_mediator_write(int receiverId, P2P::EndpointInfo endPoint
 }
 void FssServer::start()
 {
+    LoadState();
     m_network.listen(12345);
     auto temp = boost::bind(&NetworkServer::run, &m_network);
     boost::thread t{temp};
