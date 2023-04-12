@@ -132,7 +132,8 @@ void FssServer::handle_packet(Header header, PacketBinary *packet, NetworkServer
         else
         {
             LOG_ERROR(main_app) << "erron on packet handle: " << err.message();
-            return;
+            header.message_type = Header::CLOSE_CONNECTION;
+            //return;
         }
     }
     // m_network.send_packet(con_handle, Header(Header::CLOSE_CONNECTION), 123);
